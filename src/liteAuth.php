@@ -9,15 +9,6 @@ class liteAuth
     public function __construct($db)
     {   
         $this->dbfile = $db;
-        if(!file_exists($this->dbfile))
-            $this->setupdb();
-        else
-            $this->opendb();
-    }
-
-    private function setupdb()
-    {
-        echo 'Setting up db...';
         $this->opendb();
     }
 
@@ -26,5 +17,17 @@ class liteAuth
             'database_type' => 'sqlite',
             'database_file' => $this->dbfile
         ]);
+        $this->runmigrations();
+    }
+
+    private function runmigrations() {
+        $next = $this->db->get('liteauth_migrations', 'id', ['run'=>1, "ORDER" => ['id' => 'DESC']]) + 1;
+        while(file_exists(__DIR__.'/db/'.$next.'.sql'))
+        {
+            $sql = file_get_contents(__DIR__.'/db/'.$next.'.sql');
+            $this->db->query($sql); 
+            $this->db->insert('liteauth_migrations', ['id' => $next, 'run' => 1]);
+            $next++;
+        }
     }
 }
