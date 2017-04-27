@@ -4,8 +4,9 @@ namespace liteAuth;
 
 class liteAuth
 {
-    private $db;
+    public $db;
     private $dbfile;
+    public $user;
     public function __construct($db)
     {   
         $this->dbfile = $db;
@@ -47,7 +48,22 @@ class liteAuth
     }
 
     public function authUser($user, $pass){
-        $record = $this->db->get('liteauth_users', ['user', 'pass'], ['user' => $user]);
-        return password_verify($pass, $record['pass']);
+        $record = $this->db->get('liteauth_users', ['user', 'pass', 'id'], ['user' => $user]);
+        if(password_verify($pass, $record['pass']))
+        {
+            return $record['id'];
+        }
+        else
+        {
+            return False;
+        }
+    }
+
+    public function login($user, $pass)
+    {
+        if( $id = $this->authUser($user, $pass))
+            $this->user = new User($this, $id);
+        else
+            return False;
     }
 }
