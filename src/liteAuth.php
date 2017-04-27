@@ -85,9 +85,12 @@ class liteAuth
             return False;
     }
 
-    public function logout()
+    public function logout($everywhere = False)
     {
+        if($everywhere)
+            $this->db->delete('liteauth_authtokens', ['user_id' => $this->user->id]);
+        else
+            $this->db->delete('liteauth_authtokens', ['token' => $this->authtoken]);
         $this->user = '';
-        $this->db->delete('liteauth_authtokens', ['token' => $this->authtoken]);
     }
 }
