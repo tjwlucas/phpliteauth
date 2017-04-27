@@ -46,9 +46,9 @@ class liteAuth
         }
     }
 
-    public function newUser($user, $pass, $admin = False){
+    public function newUser($user, $pass, $email = '', $fname = '', $sname = '' , $admin = False){
         $hash = password_hash($pass, PASSWORD_BCRYPT);
-        return $this->db->insert('liteauth_users', ['user' => $user, 'pass' => $hash, 'admin' => $admin]) ? $this->db->id() : False;
+        return $this->db->insert('liteauth_users', ['user' => $user, 'pass' => $hash, 'admin' => $admin, 'email' => $email, 'first_name' => $fname, 'surname' => $sname]) ? $this->db->id() : False;
     }
 
     public function authUser($user, $pass){
