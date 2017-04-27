@@ -37,7 +37,6 @@ class liteAuth
     }
 
     public function authUser($user, $pass){
-        $hash = password_hash($pass, PASSWORD_BCRYPT);
         $record = $this->db->get('liteauth', ['user', 'pass'], ['user' => $user]);
         return password_verify($pass, $record['pass']);
     }
