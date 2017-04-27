@@ -10,6 +10,12 @@ class User
         $info = $auth->db->get('liteauth_users', '*', ['id' => $id]);
         $this->username = $info['user'];
         $this->admin = $info['admin'];
+        if(isset($info['first_name']) && isset($info['surname']))
+            $this->name = $info['first_name'] . ' ' . $info['surname'];
+        elseif(isset($info['first_name']))
+            $this->name = $info['first_name'];
+        else
+            $this->name = $this->username;
         return $this;
     }
 }
