@@ -43,11 +43,11 @@ class liteAuth
 
     public function newUser($user, $pass, $admin = False){
         $hash = password_hash($pass, PASSWORD_BCRYPT);
-        return $this->db->insert('liteauth', ['user' => $user, 'pass' => $hash, 'admin' => $admin]) ? $this->db->id() : False;
+        return $this->db->insert('liteauth_users', ['user' => $user, 'pass' => $hash, 'admin' => $admin]) ? $this->db->id() : False;
     }
 
     public function authUser($user, $pass){
-        $record = $this->db->get('liteauth', ['user', 'pass'], ['user' => $user]);
+        $record = $this->db->get('liteauth_users', ['user', 'pass'], ['user' => $user]);
         return password_verify($pass, $record['pass']);
     }
 }
