@@ -33,4 +33,15 @@ class User
             $info[$prop->name] = $this->{$prop->name};
         return $this->auth->db->update('liteauth_users', $info, ['id' => $this->id]);
     }
+
+    public function changePass($old, $new1, $new2)
+    {
+        if(!$this->auth->authUser($this->user, $old))
+            return False;
+        elseif($new1 != $new2)
+            return False;
+        else
+            $hash = password_hash($new1, PASSWORD_BCRYPT);
+            return $this->auth->db->update('liteauth_users', ['pass' => $hash] , ['id' => $this->id]);
+    }
 }
