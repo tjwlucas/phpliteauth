@@ -93,4 +93,10 @@ class liteAuth
             $this->db->delete('liteauth_authtokens', ['token' => $this->authtoken]);
         $this->user = '';
     }
+
+    public function loginFromPost($user = 'user', $pass='pass')
+    {
+        if(isset($_POST[$user]) && isset($_POST[$pass]))
+            return $this->login($_POST[$user], $_POST[$pass]);
+    }
 }
