@@ -16,6 +16,7 @@ class User
             $this->name = $info['first_name'];
         else
             $this->name = $this->username;
+        $this->email = $info['email'];
         return $this;
     }
 }
