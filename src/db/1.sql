@@ -9,3 +9,9 @@ CREATE TABLE `liteauth_users` (
 	`pass`	TEXT NOT NULL,
 	'admin' integer NOT NULL default 0
 );
+
+CREATE TABLE `liteauth_authtokens` (
+	`token`	TEXT NOT NULL,
+	`user_id`	INTEGER NOT NULL,
+	`created`	INTEGER NOT NULL
+);

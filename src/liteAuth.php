@@ -7,10 +7,14 @@ class liteAuth
     public $db;
     private $dbfile;
     public $user;
+    private $authtoken;
     public function __construct($db)
     {   
+        session_start();
         $this->dbfile = $db;
         $this->opendb();
+        $this->authtoken = $_SESSION['liteauth']['token'];
+        $this->resumeSession($this->authtoken);
     }
 
     private function opendb(){
@@ -62,8 +66,28 @@ class liteAuth
     public function login($user, $pass)
     {
         if( $id = $this->authUser($user, $pass))
+        {
+            $this->user = new User($this, $id);
+            $newtoken = bin2hex(random_bytes(16));
+            $this->db->insert('liteauth_authtokens', ['user_id'=>$id, 'token'=>$newtoken]);
+            $_SESSION['liteauth']['token'] = $newtoken;
+            $this->authtoken = $newtoken;
+        }
+        else
+            return False;
+    }
+
+    public function resumeSession($authtoken)
+    {
+        if( $id = $this->db->get('liteauth_authtokens', 'user_id', ['token'=>$authtoken]) )
             $this->user = new User($this, $id);
         else
             return False;
+    }
+
+    public function logout()
+    {
+        $this->user = '';
+        $this->db->delete('liteauth_authtokens', ['token' => $this->authtoken]);
     }
 }
