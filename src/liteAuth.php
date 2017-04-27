@@ -25,15 +25,19 @@ class liteAuth
         while(file_exists(__DIR__.'/db/'.$next.'.sql'))
         {
             $sql = file_get_contents(__DIR__.'/db/'.$next.'.sql');
-            $this->db->query($sql); 
+            $sqlarray = explode(';', $sql);
+            foreach($sqlarray as $stmt)
+            {
+                $this->db->query($stmt);
+            }
             $this->db->query("insert into liteauth_migrations (id, run) values ( $next , CURRENT_TIMESTAMP );");
             $next++;
         }
     }
 
-    public function newUser($user, $pass){
+    public function newUser($user, $pass, $admin = False){
         $hash = password_hash($pass, PASSWORD_BCRYPT);
-        return $this->db->insert('liteauth', ['user' => $user, 'pass' => $hash]) ? $this->db->id() : False;
+        return $this->db->insert('liteauth', ['user' => $user, 'pass' => $hash, 'admin' => $admin]) ? $this->db->id() : False;
     }
 
     public function authUser($user, $pass){
