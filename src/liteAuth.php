@@ -24,6 +24,12 @@ class liteAuth
         $next = $this->db->get('liteauth_migrations', 'id', [ "ORDER" => ['id' => 'DESC']]) + 1;
         while(file_exists(__DIR__.'/db/'.$next.'.sql'))
         {
+            $backupdir = dirname($this->dbfile).'/premigrationbackups';
+            if(!file_exists($backupdir))
+            {
+                mkdir($backupdir);
+            }
+            copy($this->dbfile, $backupdir.'/pre-'.$next.'-'.basename($this->dbfile));
             $sql = file_get_contents(__DIR__.'/db/'.$next.'.sql');
             $sqlarray = explode(';', $sql);
             foreach($sqlarray as $stmt)
