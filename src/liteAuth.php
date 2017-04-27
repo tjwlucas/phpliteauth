@@ -33,7 +33,7 @@ class liteAuth
 
     public function newUser($user, $pass){
         $hash = password_hash($pass, PASSWORD_BCRYPT);
-        if($this->db->get('liteauth', ['user' => $user]))
+        if($this->db->get('liteauth', 'user', ['user' => $user]))
             throw new \Exception('User already exists');
         $this->db->insert('liteauth', ['user' => $user, 'pass' => $hash]);
     }
