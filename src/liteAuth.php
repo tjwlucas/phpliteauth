@@ -36,7 +36,7 @@ class liteAuth
             {
                 $this->db->query($stmt);
             }
-            $this->db->query("insert into liteauth_migrations (id, run) values ( $next , CURRENT_TIMESTAMP );");
+            $this->db->insert('liteauth_migrations' , ['id' => $next] );
             $next++;
         }
     }
