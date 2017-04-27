@@ -1,1 +1,0 @@
-alter table 'liteauth' rename to 'liteauth_users';
