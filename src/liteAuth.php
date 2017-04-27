@@ -33,8 +33,7 @@ class liteAuth
 
     public function newUser($user, $pass){
         $hash = password_hash($pass, PASSWORD_BCRYPT);
-        $this->db->insert('liteauth', ['user' => $user, 'pass' => $hash]);
-        return $this->db->id();
+        return $this->db->insert('liteauth', ['user' => $user, 'pass' => $hash]) ? $this->db->id() : False;
     }
 
     public function authUser($user, $pass){
