@@ -8,14 +8,14 @@ class User
     {
         $this->id = $id;
         $info = $auth->db->get('liteauth_users', ['user', 'first_name', 'surname', 'email', 'admin'], ['id' => $id]);
+        foreach($info as $key => $value)
+            $this->$key = $value;
         if(isset($info['first_name']) && isset($info['surname']))
             $this->name = $info['first_name'] . ' ' . $info['surname'];
         elseif(isset($info['first_name']))
             $this->name = $info['first_name'];
         else
-            $this->name = $this->username;
-        foreach($info as $key => $value)
-            $this->$key = $value;
+            $this->name = $this->user;
         return $this;
     }
 }
