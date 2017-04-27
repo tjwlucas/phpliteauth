@@ -1,9 +1,9 @@
-CREATE TABLE `liteauth_migrations` (
+CREATE TABLE `__TABLE_PREF__migrations` (
 	`id`	INTEGER NOT NULL PRIMARY KEY UNIQUE,
 	`run`	INTEGER default CURRENT_TIMESTAMP
 );
 
-CREATE TABLE `liteauth_users` (
+CREATE TABLE `__TABLE_PREF__users` (
 	`id`	INTEGER NOT NULL PRIMARY KEY AUTOINCREMENT UNIQUE,
 	`user`	TEXT NOT NULL UNIQUE,
 	`pass`	TEXT NOT NULL,
@@ -13,7 +13,7 @@ CREATE TABLE `liteauth_users` (
 	`email`	TEXT
 );
 
-CREATE TABLE `liteauth_authtokens` (
+CREATE TABLE `__TABLE_PREF__authtokens` (
 	`token`	TEXT NOT NULL,
 	`user_id`	INTEGER NOT NULL,
 	`created`	INTEGER NOT NULL
