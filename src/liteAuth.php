@@ -8,34 +8,37 @@ class liteAuth
     private $dbfile;
     public $user;
     private $authtoken;
-    public function __construct($db, $prefix = 'liteauth_')
+    public function __construct($db, $prefix = 'liteauth_', $preMigrationBackup = False)
     {   
         session_start();
         $this->dbfile = $db;
         $this->prefix = $prefix;
-        $this->opendb();
+        $this->opendb($preMigrationBackup);
         $this->authtoken = $_SESSION['liteauth']['token'];
         $this->resumeSession($this->authtoken);
     }
 
-    private function opendb(){
+    private function opendb($preMigrationBackup){
         $this->db = new \Medoo\Medoo([
             'database_type' => 'sqlite',
             'database_file' => $this->dbfile
         ]);
-        $this->runmigrations();
+        $this->runmigrations($preMigrationBackup);
     }
 
-    private function runmigrations() {
+    private function runmigrations($preMigrationBackup) {
         $next = $this->db->get($this->prefix.'migrations', 'id', [ "ORDER" => ['id' => 'DESC']]) + 1;
         while(file_exists(__DIR__.'/db/'.$next.'.sql'))
         {
-            $backupdir = dirname($this->dbfile).'/premigrationbackups';
-            if(!file_exists($backupdir))
+            if($preMigrationBackup == True)
             {
-                mkdir($backupdir);
+                $backupdir = dirname($this->dbfile).'/premigrationbackups';
+                if(!file_exists($backupdir))
+                {
+                    mkdir($backupdir);
+                }
+                copy($this->dbfile, $backupdir.'/pre-'.$next.'-'.basename($this->dbfile));
             }
-            copy($this->dbfile, $backupdir.'/pre-'.$next.'-'.basename($this->dbfile));
             $sql = file_get_contents(__DIR__.'/db/'.$next.'.sql');
             $runsql = str_replace('__TABLE_PREF__', $this->prefix , $sql);
             $sqlarray = explode(';', $runsql);
