@@ -15,6 +15,9 @@ class User
         return $this;
     }
 
+    /** Outputs a human readable name, base on firstname and surname, if they exist for the user,
+    * but falling back on username, otherwise
+    */
     public function name()
     {
         if(isset($this->first_name) && isset($this->surname))
@@ -25,6 +28,8 @@ class User
             return $this->user;
     }
 
+    /** Save any changes to user properties that may have been made to the database
+    */
     public function save()
     {
         $reflection = new \ReflectionObject($this);
@@ -34,6 +39,9 @@ class User
         return $this->auth->db->update($this->auth->prefix.'users', $info, ['id' => $this->id]);
     }
 
+    /** Changes the password for the current user
+    * takes current password, then the new password twice as inputs
+    */
     public function changePass($old, $new1, $new2)
     {
         if(!$this->auth->authUser($this->user, $old))

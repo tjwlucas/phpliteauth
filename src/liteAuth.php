@@ -51,11 +51,15 @@ class liteAuth
         }
     }
 
+    /** Creates a new user with the provided details
+    */
     public function newUser($user, $pass, $email = '', $fname = '', $sname = '' , $admin = False){
         $hash = password_hash($pass, PASSWORD_BCRYPT);
         return $this->db->insert($this->prefix.'users', ['user' => $user, 'pass' => $hash, 'admin' => $admin, 'email' => $email, 'first_name' => $fname, 'surname' => $sname]) ? $this->db->id() : False;
     }
 
+    /** Returns True if $pass matches the password for $user 
+    */
     public function authUser($user, $pass){
         $record = $this->db->get($this->prefix.'users', ['user', 'pass', 'id'], ['user' => $user]);
         if(password_verify($pass, $record['pass']))
@@ -68,6 +72,9 @@ class liteAuth
         }
     }
 
+    /** Checks the password against the given user, and if it authenticates successfully,
+    * populates the $this->user property with an instance of the User class for that user.
+    */
     public function login($user, $pass)
     {
         if( $id = $this->authUser($user, $pass))
@@ -83,6 +90,8 @@ class liteAuth
             return False;
     }
 
+    /** Runs when the library is loaded to authenticate and resume the user session
+    */
     public function resumeSession($authtoken)
     {
         if( $id = $this->db->get($this->prefix.'authtokens', 'user_id', ['token'=>$authtoken]) )
@@ -91,6 +100,10 @@ class liteAuth
             return False;
     }
 
+    /** Logs the current user out and destroys the current session token
+    * if the $everywhere flag is true, *all* of the current users sessions will be destroyed
+    * (effectively logging that user out from any logged in machine)
+    */
     public function logout($everywhere = False)
     {
         if($everywhere)
@@ -100,22 +113,32 @@ class liteAuth
         $this->user = '';
     }
 
+    /** A helper function which looks for $_POST['user'] and $_POST['pass'] variables, and
+    * attempts to log in using them
+    */
     public function loginFromPost($user = 'user', $pass='pass')
     {
         if(isset($_POST[$user]) && isset($_POST[$pass]))
             return $this->login($_POST[$user], $_POST[$pass]);
     }
 
+    /** Returns a count of users that exist in the database
+    */
     public function countUsers()
     {
         return $this->db->count($this->prefix.'users');
     }
 
+    /** Returns False if no users exist (This is useful to allow for 'first run' setup procedures)
+    */
     public function existUsers()
     {
         return $this->countUsers() > 0 ? True : False;
     }
 
+    /** Similarly to loginFromPost(), takes POST data and uses it to register a new user
+    * NOTE: it looks for both 'pass1' and 'pass2', and requires both to exist, and match, to be successful
+    */
     public function registerFromPost()
     {
         if($_SERVER['REQUEST_METHOD'] == 'POST')
