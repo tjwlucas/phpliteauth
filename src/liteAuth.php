@@ -114,4 +114,28 @@ class liteAuth
     {
         return $this->countUsers() > 0 ? True : False;
     }
+
+    public function registerFromPost()
+    {
+        if($_SERVER['REQUEST_METHOD'] == 'POST')
+        {
+            if(!isset($_POST['user']))
+            {
+                throw new \Exception('Must set a username.');
+            }
+            if(!isset($_POST['pass']))
+            {
+                throw new \Exception('Must set a password.');
+            }
+            if($_POST['pass']!=$_POST['pass2'])
+            {
+                throw new \Exception('passwords don\'t match.');
+            }
+            $email = isset($_POST['email']) ? $_POST['email'] : '';
+            $fname = isset($_POST['fname']) ? $_POST['fname'] : '';
+            $sname = isset($_POST['sname']) ? $_POST['sname'] : '';
+            $admin = isset($_POST['admin']) ? $_POST['admin'] : False;
+            return $this->newUser($_POST['user'], $_POST['pass'], $email, $fname, $sname , $admin);
+        }
+    }
 }
