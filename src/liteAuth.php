@@ -131,9 +131,9 @@ class liteAuth
             {
                 throw new \Exception('passwords don\'t match.');
             }
-            $email = isset($_POST['email']) ? $_POST['email'] : '';
-            $fname = isset($_POST['fname']) ? $_POST['fname'] : '';
-            $sname = isset($_POST['sname']) ? $_POST['sname'] : '';
+            $email = isset($_POST['email']) ? $_POST['email'] : null;
+            $fname = isset($_POST['fname']) ? $_POST['fname'] : null;
+            $sname = isset($_POST['sname']) ? $_POST['sname'] : null;
             $admin = isset($_POST['admin']) ? $_POST['admin'] : False;
             return $this->newUser($_POST['user'], $_POST['pass'], $email, $fname, $sname , $admin);
         }
