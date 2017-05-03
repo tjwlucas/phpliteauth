@@ -9,7 +9,7 @@ class User
     {
         $this->id = $id;
         $this->auth = $auth;
-        $info = $auth->db->get('liteauth_users', ['user', 'first_name', 'surname', 'email', 'admin'], ['id' => $id]);
+        $info = $auth->db->get($this->auth->prefix.'users', ['user', 'first_name', 'surname', 'email', 'admin'], ['id' => $id]);
         foreach($info as $key => $value)
             $this->$key = $value;
         return $this;
@@ -31,7 +31,7 @@ class User
         $properties = $reflection->getProperties(\ReflectionProperty::IS_PUBLIC);
         foreach($properties as $prop)
             $info[$prop->name] = $this->{$prop->name};
-        return $this->auth->db->update('liteauth_users', $info, ['id' => $this->id]);
+        return $this->auth->db->update($this->auth->prefix.'users', $info, ['id' => $this->id]);
     }
 
     public function changePass($old, $new1, $new2)
@@ -42,6 +42,6 @@ class User
             return False;
         else
             $hash = password_hash($new1, PASSWORD_BCRYPT);
-            return $this->auth->db->update('liteauth_users', ['pass' => $hash] , ['id' => $this->id]);
+            return $this->auth->db->update($this->auth->prefix.'users', ['pass' => $hash] , ['id' => $this->id]);
     }
 }
