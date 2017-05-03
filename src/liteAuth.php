@@ -119,11 +119,11 @@ class liteAuth
     {
         if($_SERVER['REQUEST_METHOD'] == 'POST')
         {
-            if(!isset($_POST['user']))
+            if(!isset($_POST['user']) OR $_POST['user'] == '')
             {
                 throw new \Exception('Must set a username.');
             }
-            if(!isset($_POST['pass']))
+            if(!isset($_POST['pass']) OR $_POST['pass'] == '')
             {
                 throw new \Exception('Must set a password.');
             }
