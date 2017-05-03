@@ -101,4 +101,14 @@ class liteAuth
         if(isset($_POST[$user]) && isset($_POST[$pass]))
             return $this->login($_POST[$user], $_POST[$pass]);
     }
+
+    public function countUsers()
+    {
+        return $this->db->count($this->prefix.'users');
+    }
+
+    public function existUsers()
+    {
+        return $this->countUsers() > 0 ? True : False;
+    }
 }
