@@ -134,7 +134,7 @@ class liteAuth
             $email = isset($_POST['email']) ? $_POST['email'] : null;
             $fname = isset($_POST['fname']) ? $_POST['fname'] : null;
             $sname = isset($_POST['sname']) ? $_POST['sname'] : null;
-            $admin = isset($_POST['admin']) ? $_POST['admin'] : False;
+            $admin = isset($_POST['admin']) ? 1 : 0;
             return $this->newUser($_POST['user'], $_POST['pass'], $email, $fname, $sname , $admin);
         }
     }
