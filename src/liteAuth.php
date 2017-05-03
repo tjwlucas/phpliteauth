@@ -77,6 +77,7 @@ class liteAuth
             $this->db->insert($this->prefix.'authtokens', ['user_id'=>$id, 'token'=>$newtoken]);
             $_SESSION['liteauth']['token'] = $newtoken;
             $this->authtoken = $newtoken;
+			return True;
         }
         else
             return False;
