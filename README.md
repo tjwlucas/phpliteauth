@@ -72,7 +72,7 @@ One example would be to require an admin user to be logged in:
 
 ### Logging in
 
-Logging in is very similar to creating a user, you haev the `login()` method you can call:
+Logging in is very similar to creating a user, you have the `login()` method you can call:
 
 	$auth->login($user, $pass);
 
@@ -100,7 +100,7 @@ Just like with registration, there is a helper method for logging in from a form
 
 If you put that in, for example, `login.php`, the form at `loginform.html`:
 
-	<form action="register.php" method="post">
+	<form action="login.php" method="post">
 	<input type="text" name="user" placeholder="Username"><br>
 	<input type="password" name="pass" placeholder="Password"><br>
 	<input type="submit" value="Login">
