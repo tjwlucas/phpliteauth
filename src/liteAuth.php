@@ -14,7 +14,7 @@ class liteAuth
         $this->dbfile = $db;
         $this->prefix = $prefix;
         $this->opendb($preMigrationBackup);
-        $this->authtoken = $_SESSION['liteauth']['token'];
+        $this->authtoken = isset($_SESSION['liteauth']['token']) ? $_SESSION['liteauth']['token'] : '';
         $this->resumeSession($this->authtoken);
     }
 
